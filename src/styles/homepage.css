@@ -30,11 +30,15 @@ button {
   border-radius: 10px;
   background-color: #64558f;
   font-size: 1.2rem;
+  border: none;
+  transition: 150ms;
 }
 
 button:hover {
   cursor: pointer;
+  scale: 1.05;
 }
+
 
 a, a:visited {
   color: white;
