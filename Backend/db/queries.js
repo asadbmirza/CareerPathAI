@@ -21,6 +21,16 @@ async function getUserByUsername(username) {
   return rows[0];
 }
 
+async function getUserById(id) {
+    const query = `
+      SELECT * FROM users
+      WHERE id = $1;
+    `;
+  
+    const { rows } = await pool.query(query, [id]);
+    return rows[0];
+  }
+
 async function getUserByEmail(email) {
     const query = `
       SELECT * FROM users
@@ -60,10 +70,23 @@ async function getResponsesByUserId(userId) {
   return rows;
 }
 
+async function getSkillsByUserId(userId) {
+    const query = `
+      SELECT * FROM skills
+      WHERE user_id = $1;
+    `;
+  
+    const { rows } = await pool.query(query, [userId]);
+    return rows;
+  }
+
+
 module.exports = {
     createUser,
+    getUserById,
     getUserByUsername,
     getUserByEmail,
     createResponses,
     getResponsesByUserId,
+    getSkillsByUserId
 }

@@ -4,12 +4,22 @@ const session = require("express-session");
 require("dotenv").config();
 const passport = require("passport");
 const userRouter = require("./routes/userRouter");
+const cors = require("cors");
+
 
 const app = express();
+const corsOptions = {
+    origin: 'http://localhost:5173', // Replace with your React app's origin
+    credentials: true, // Allow credentials
+};
+app.use(cors(corsOptions));
+app.use(express.json());
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
-app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: false }));
+app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: false , cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 30,
+}}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
