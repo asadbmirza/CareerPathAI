@@ -40,6 +40,7 @@ const Details = () => {
         initialValues={initialValues}
         submitText="Get Curated Advice"
         schema={schema}
+        linkTo="/dashboard"
       >
         <ListField 
           label="Skills and Interests" 

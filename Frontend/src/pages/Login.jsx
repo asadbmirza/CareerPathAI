@@ -1,5 +1,7 @@
 import React from "react"
 import CustomForm from '../components/CustomForm';
+import { Link } from "react-router-dom"
+import { ReturningUser } from "../styles/formstyles.js"
 import FormField from "../components/FormField.jsx";
 import * as Yup from "yup";
 
@@ -30,9 +32,11 @@ const Login = () => {
         initialValues={initialValues}
         submitText="Login"
         schema={schema}
+        linkTo="/dashboard"
       >
         <FormField label="Username" type="text" name="username"></FormField>
         <FormField label="Password" type="password" name="password"></FormField>
+        <ReturningUser><Link to="/register">Need to create an account?</Link></ReturningUser>
       </CustomForm>
     </div>
   )
