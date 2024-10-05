@@ -42,7 +42,7 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
       validateOnBlur={true}
       onSubmit={(values, actions) => onSubmit(values, actions, submitText)}
     >
-      {({ isSubmitting }) => (
+      {({ values, setFieldValue, isSubmitting }) => (
         <RegisterForm>
           {children}
           <RegisterButton type="submit" disabled={isSubmitting}>
