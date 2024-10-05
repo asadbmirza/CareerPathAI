@@ -26,7 +26,7 @@ const Homepage = () => {
         <h1>Career Path AI</h1>
         <h2>Your Future Starts Here</h2>
       </div>
-      <Link to="dashboard">
+      <Link to="register">
         <BeginButton>Begin Now</BeginButton>
       </Link>
     </HomepageText>
