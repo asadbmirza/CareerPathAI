@@ -1,51 +1,39 @@
-import { RegisterButton, RegisterForm, InfoBox, ReturningUser, ErrorText } from "../styles/formstyles.js"
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { RegisterButton, RegisterForm } from "../styles/formstyles.js"
+import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
-const schema = Yup.object().shape({
-  username: Yup.string()
-      .min(6, "Username must be between 6-18 characters")
-      .max(18, "Username must be between 6-18 characters")
-      .required("Required"),
-  email: Yup.string()
-      .email("Invalid email")
-      .required("Required"),
-  password: Yup.string()
-      .min(8, "Password must be greater than 8 characters")
-      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .matches(/[0-9]/, "Password must contain at least one number")
-      .required("Required")
-});
 
-const onSubmit = async (values, { setSubmitting }, submitText) => {
-  try {
-    console.log(submitText)
-    if (submitText === "Login") {
-      console.log(`Logging in with: ${JSON.stringify(values)}`);
-      const response = await axios.post('http://localhost:3000/login', values);
-      console.log(`Login successful: ${JSON.stringify(response.data)}`);
-      return;
-    }
-    if (submitText === "Continue") {
-      console.log(`Logging in with: ${JSON.stringify(values)}`);
 
-      const response = await axios.post('http://localhost:3000/register', values);
-      console.log(`Registration successful`);
-      console.log(`Registration successful: ${JSON.stringify(response.data)}`);
-      return;
+const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => {
+  const navigate = useNavigate();
+
+  const onSubmit = async (values, { setSubmitting }, submitText) => {
+    try {
+      console.log(submitText)
+      if (submitText === 'Login') {
+        const response = await axios.post('http://localhost:3000/login', values, {withCredentials: true});
+        console.log(`Login successful: ${JSON.stringify(response.data)}`);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        navigate(linkTo);
+      } 
+      else if (submitText === 'Continue') {
+        const response = await axios.post('http://localhost:3000/register', values, {withCredentials: true});
+        console.log(`Registration successful: ${JSON.stringify(response.data)}`);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        navigate(linkTo);
+      }
+    } 
+    catch (error) {
+      console.error('There was an error!', error);
+      return null;
+    } 
+    finally {
+      setSubmitting(false); 
     }
-  } catch (error) {
-    console.error('There was an error!', error);
-  } 
-  finally {
-    setSubmitting(false); 
   }
-}
 
-const CustomForm = ({ initialValues, submitText,children }) => {
   return (
     <Formik
       initialValues={initialValues}
@@ -57,8 +45,9 @@ const CustomForm = ({ initialValues, submitText,children }) => {
       {({ isSubmitting }) => (
         <RegisterForm>
           {children}
-
-          <RegisterButton type="submit" disabled={isSubmitting}><Link>{submitText}</Link></RegisterButton>
+          <RegisterButton type="submit" disabled={isSubmitting}>
+            {submitText}
+          </RegisterButton>
         </RegisterForm>
       )}
     </Formik>
