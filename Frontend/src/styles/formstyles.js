@@ -16,7 +16,8 @@ const RegisterButton = styled.button`
   border-radius: 5px;
   color: white;
   font-size: 1.2rem;
-  
+  margin-top: 10px;
+
   &:hover {
     scale: unset;
     background-color: #64558f;
@@ -43,7 +44,7 @@ const InfoBox = styled.div`
   color: black;
 `
 const ReturningUser = styled.div`
-  margin: 15px 0px 0px 10px;
+  margin-left: 10px;
   align-self: start;
   color: gray;
   font-size: 1rem;

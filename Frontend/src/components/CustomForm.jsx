@@ -2,6 +2,7 @@ import { RegisterButton, RegisterForm, InfoBox, ReturningUser, ErrorText } from 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom"
+import axios from "axios";
 
 const schema = Yup.object().shape({
   username: Yup.string()
@@ -19,7 +20,19 @@ const schema = Yup.object().shape({
       .required("Required")
 });
 
-const CustomForm = ({ initialValues, onSubmit, submitText,children }) => {
+const onSubmit = async (values, { setSubmitting }) => {
+  try {
+    const response = await axios.post('placeholder', values);
+    console.log(`Registration successful: ${JSON.stringify(response.data)}`);
+  } catch (error) {
+    console.error('There was an error!', error);
+  } 
+  finally {
+    setSubmitting(false); 
+  }
+}
+
+const CustomForm = ({ initialValues, submitText,children }) => {
   return (
     <Formik
       initialValues={initialValues}

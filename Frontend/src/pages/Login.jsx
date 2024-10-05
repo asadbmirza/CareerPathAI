@@ -7,18 +7,12 @@ const initialValues = {
   password: "",
 }
 
-const onSubmit = (values, { setSubmitting }) => {
-  alert(JSON.stringify(values, null, 2));
-  setSubmitting(false);
-};
-
 const Login = () => {
   return (
     <div>
       <h1></h1>
       <CustomForm
         initialValues={initialValues}
-        onSubmit={onSubmit}
         submitText="Login"
       >
         <FormField label="Username" type="text" name="username"></FormField>
