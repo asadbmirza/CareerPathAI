@@ -1,7 +1,3 @@
-* {
-  color: white;
-}
-
 body {
   display: flex;
   justify-content: center;
@@ -17,19 +13,7 @@ h2 {
   font-size: 2rem;
 }
 
-.homepage-text {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 20px;
-}
-
 button {
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #64558f;
-  font-size: 1.2rem;
   border: none;
   transition: 150ms;
 }
@@ -39,9 +23,20 @@ button:hover {
   scale: 1.05;
 }
 
-
 a, a:visited {
-  color: white;
   text-decoration: none;
 }
 
+a:visited {
+  color: unset;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+  color: black;
+  padding: 12px 17px;
+  width: 100%;
+  margin-top: 5px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px rgba(128, 128, 128, 0.256) solid;
+}

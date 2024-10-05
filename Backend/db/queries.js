@@ -21,6 +21,16 @@ async function getUserByUsername(username) {
   return rows[0];
 }
 
+async function getUserByEmail(email) {
+    const query = `
+      SELECT * FROM users
+      WHERE email = $1;
+    `;
+  
+    const { rows } = await pool.query(query, [email]);
+    return rows[0];
+  }
+
 async function createResponses(rating, responses, userId) {
   const query = `
     INSERT INTO responses (rating, response1, response2, response3, response4, response5, user_id)
@@ -53,6 +63,7 @@ async function getResponsesByUserId(userId) {
 module.exports = {
     createUser,
     getUserByUsername,
+    getUserByEmail,
     createResponses,
     getResponsesByUserId,
 }
