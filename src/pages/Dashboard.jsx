@@ -1,6 +1,6 @@
 import Register from "../components/Register.jsx"
 
-function Dashboard() {
+const Dashboard = () => {
   return (
     <Register/>
   )

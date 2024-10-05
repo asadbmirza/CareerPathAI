@@ -19,7 +19,7 @@ const HomepageText = styled.div`
   color: white;
 `
 
-function Homepage() {
+const Homepage = () => {
   return (
     <HomepageText>
       <div>

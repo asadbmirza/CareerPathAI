@@ -1,6 +1,6 @@
 import Homepage from "./pages/Homepage.jsx"
 
-function App() {
+const App = () => {
   return (
     <Homepage/>
   )

@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import styled from 'styled-components'
+import styled from "styled-components"
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const RegisterButton = styled.button`
   background-color: #2c2c2c;
@@ -16,7 +18,7 @@ const RegisterButton = styled.button`
     color: white;
   }
 `
-const RegisterForm = styled.form`
+const RegisterForm = styled(Form)`
   display: flex;
   flex-direction: column;
   min-width: 600px;
@@ -41,48 +43,87 @@ const ReturningUser = styled.a`
   align-self: start;
   color: gray;
   font-size: 1rem;
+
+  &: hover {
+    text-decoration: underline;
+  }
 `
+
+const ErrorText = styled(ErrorMessage)`
+  font-size: 0.8rem;
+  margin: 5px;
+  color: red;
+`
+
+const schema = Yup.object().shape({
+  username: Yup.string()
+      .min(6, "Username must be between 6-18 characters")
+      .max(18, "Username must be between 6-18 characters")
+      .required("Required"),
+  email: Yup.string()
+      .email("Invalid email")
+      .required("Required"),
+  password: Yup.string()
+      .min(8, "Password must be greater than 8 characters")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[0-9]/, "Password must contain at least one number")
+      .required("Required")
+});
+
 
 
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   return (
-    <RegisterForm>
-      <InfoBox>
-        <label htmlFor="">Username</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </InfoBox>
-      <InfoBox>
-        <label htmlFor="">Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </InfoBox>
-      <InfoBox>
-        <label htmlFor="">Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </InfoBox>
-      <ReturningUser>
-        <Link>Returning User?</Link>
-      </ReturningUser>
-      <RegisterButton type="submit">Register</RegisterButton>
-    </RegisterForm>
+    <div>
+      <h1>form</h1>
+      <Formik
+        initialValues={{
+          username: "",
+          email: "",
+          password: "",
+        }}
+        validationSchema={schema}
+        validateOnChange={false}
+        validateOnBlur={true}
+        onSubmit={(values, { setSubmitting }) => {
+          alert(JSON.stringify(values, null, 2));
+          setSubmitting(false);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <RegisterForm>
+            <InfoBox>
+              <label htmlFor="">Username</label>
+              <Field
+                type="text"
+                name="username"
+              />
+              <ErrorText name="username" component="div"/>
+            </InfoBox>
+            <InfoBox>
+              <label htmlFor="">Email</label>
+              <Field
+                type="text"
+                name="email"
+              />
+              <ErrorText name="email" component="div"/>
+            </InfoBox>
+            <InfoBox>
+              <label htmlFor="">Password</label>
+              <Field
+                type="password"
+                name="password"
+              />
+              <ErrorText name="password" component="div"/>
+            </InfoBox>
+            <ReturningUser><Link>Returning User?</Link></ReturningUser>
+            <RegisterButton type="submit">Register</RegisterButton>
+          </RegisterForm>
+        )}
+      </Formik>
+    </div>
   );
 };
 
