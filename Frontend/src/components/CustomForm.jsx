@@ -1,7 +1,7 @@
-import { RegisterButton, RegisterForm, InfoBox, ReturningUser, ErrorText } from "../styles/formstyles.js"
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { RegisterButton, RegisterForm } from "../styles/formstyles.js"
+import { Formik } from "formik";
 import * as Yup from "yup";
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
 const schema = Yup.object().shape({
@@ -20,19 +20,25 @@ const schema = Yup.object().shape({
       .required("Required")
 });
 
-const onSubmit = async (values, { setSubmitting }) => {
-  try {
-    const response = await axios.post('placeholder', values);
-    console.log(`Registration successful: ${JSON.stringify(response.data)}`);
-  } catch (error) {
-    console.error('There was an error!', error);
-  } 
-  finally {
-    setSubmitting(false); 
-  }
-}
 
-const CustomForm = ({ initialValues, submitText,children }) => {
+const CustomForm = ({ initialValues, submitText, children, linkTo }) => {
+  const navigate = useNavigate();
+
+  const onSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.post('https://jsonplaceholder.typicode.com/users', values);
+      console.log(`Registration successful: ${JSON.stringify(response.data)}`);
+      navigate(linkTo)
+    } 
+    catch (error) {
+      console.error('There was an error!', error);
+      return null;
+    } 
+    finally {
+      setSubmitting(false); 
+    }
+  }
+
   return (
     <Formik
       initialValues={initialValues}
@@ -44,8 +50,9 @@ const CustomForm = ({ initialValues, submitText,children }) => {
       {({ isSubmitting }) => (
         <RegisterForm>
           {children}
-
-          <RegisterButton type="submit" disabled={isSubmitting}><Link>{submitText}</Link></RegisterButton>
+          <RegisterButton type="submit" disabled={isSubmitting}>
+            {submitText}
+          </RegisterButton>
         </RegisterForm>
       )}
     </Formik>

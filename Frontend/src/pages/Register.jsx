@@ -17,6 +17,7 @@ const Register = () => {
       <CustomForm
         initialValues={initialValues}
         submitText="Continue"
+        linkTo="/details"
       >
         <FormField label="Username" type="text" name="username"></FormField>
         <FormField label="Email" type="email" name="email"></FormField>
