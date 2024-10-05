@@ -65,6 +65,12 @@ const postRegister = async (req, res) => {
   const { username, email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    if (db.getUserByUsername(username)) {
+      return res.status(400).send("Username already exists");
+    }
+    if (db.getUserByEmail(email)) {
+      return res.status(400).send("Email already exists");
+    }
     await db.createUser(username, email, hashedPassword);
   } catch (err) {
     res.status(500).send("An error occurred while registering");
