@@ -20,10 +20,23 @@ const schema = Yup.object().shape({
       .required("Required")
 });
 
-const onSubmit = async (values, { setSubmitting }) => {
+const onSubmit = async (values, { setSubmitting }, submitText) => {
   try {
-    const response = await axios.post('placeholder', values);
-    console.log(`Registration successful: ${JSON.stringify(response.data)}`);
+    console.log(submitText)
+    if (submitText === "Login") {
+      console.log(`Logging in with: ${JSON.stringify(values)}`);
+      const response = await axios.post('http://localhost:3000/login', values);
+      console.log(`Login successful: ${JSON.stringify(response.data)}`);
+      return;
+    }
+    if (submitText === "Continue") {
+      console.log(`Logging in with: ${JSON.stringify(values)}`);
+
+      const response = await axios.post('http://localhost:3000/register', values);
+      console.log(`Registration successful`);
+      console.log(`Registration successful: ${JSON.stringify(response.data)}`);
+      return;
+    }
   } catch (error) {
     console.error('There was an error!', error);
   } 
@@ -39,7 +52,7 @@ const CustomForm = ({ initialValues, submitText,children }) => {
       validationSchema={schema}
       validateOnChange={false}
       validateOnBlur={true}
-      onSubmit={onSubmit}
+      onSubmit={(values, actions) => onSubmit(values, actions, submitText)}
     >
       {({ isSubmitting }) => (
         <RegisterForm>
