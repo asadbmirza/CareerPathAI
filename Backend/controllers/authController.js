@@ -41,7 +41,8 @@ const getUserProfile = (req, res) => {
   if (!req.user) {
     return res.status(500).send("User data not found");
   }
-  res.send(`Welcome ${req.user.username}`);
+  console.log(req.user);
+  res.status(200).json(req.user);
 };
 
 const postLogin = (req, res, next) => {
@@ -56,7 +57,8 @@ const postLogin = (req, res, next) => {
       if (err) {
         return res.status(500).json({ message: "Login failed" });
       }
-      return res.status(200).json({ message: "Login successful" }); // Successful login
+      
+      return res.status(200).json({ message: "Login successful", user: user}); // Successful login
     });
   })(req, res, next);
 };
@@ -64,14 +66,23 @@ const postLogin = (req, res, next) => {
 const postRegister = async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    if (db.getUserByUsername(username)) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    if (await db.getUserByUsername(username)) {
       return res.status(400).send("Username already exists");
     }
-    if (db.getUserByEmail(email)) {
+    if (await db.getUserByEmail(email)) {
       return res.status(400).send("Email already exists");
     }
     await db.createUser(username, email, hashedPassword);
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Login failed" });
+      }
+      return res.status(200).json({ message: "Login successful" }); // Successful login
+    });
+
+    return res.status(200).json({ message: "Login successful" });
+
   } catch (err) {
     res.status(500).send("An error occurred while registering");
   }
