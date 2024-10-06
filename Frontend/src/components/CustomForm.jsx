@@ -2,8 +2,15 @@ import { RegisterButton, RegisterForm } from "../styles/formstyles.js"
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
+import { useState } from 'react';
+import { HeaderText } from "../styles/mainpage.js";
+
 
 const CustomForm = ({ initialValues, submitText, schema, children, linkTo, source }) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
   const onSubmit = async (values, { setSubmitting }) => {
@@ -13,7 +20,9 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
       if(source === "details"){
         fetchData(response.data);
       }
-      navigate(linkTo)
+      else {
+        navigate(linkTo);
+      }
     } 
     catch (error) {
       console.error('There was an error!', error)
@@ -26,6 +35,7 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
 
   const fetchData = async ({ skills, location, education }) => {
     try {
+      setLoading(true)
       const response = await axios.get('https://api.example.com/data', {
         params: {
           skills,
@@ -33,11 +43,27 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
           education
         }
       });
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
+      setData(response.data)
+      navigate(linkTo), {
+        response: {
+          data
+        }
+      };
+    } 
+    catch (error) {
+      setError('An error occurred while fetching data'); // Handle error
+      setLoading(false); // Stop loading on error
     }
   };
+
+  if (loading) {
+    return <HeaderText>Loading...</HeaderText>
+  }
+
+  if (error) {
+    return  <HeaderText>{error}...</HeaderText>;
+  }
+
 
   return (
     <Formik
