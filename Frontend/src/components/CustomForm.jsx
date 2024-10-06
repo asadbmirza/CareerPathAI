@@ -9,6 +9,18 @@ import axios from "axios";
 const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => {
   const navigate = useNavigate();
 
+  const handleSignOut = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/logout', {withCredentials: true});
+      console.log(`Logout successful: ${JSON.stringify(response.data)}`);
+      localStorage.removeItem("user");
+      navigate('/login');
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+    
+  }
+
   const onSubmit = async (values, { setSubmitting }, submitText) => {
     try {
       if (submitText === 'Login') {
@@ -47,12 +59,17 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
       onSubmit={(values, actions) => onSubmit(values, actions, submitText)}
     >
       {({ values, setFieldValue, isSubmitting }) => (
-        <RegisterForm>
-          {children}
-          <RegisterButton type="submit" disabled={isSubmitting}>
-            {submitText}
+        <>
+          <RegisterForm>
+            {children}
+            <RegisterButton type="submit" disabled={isSubmitting}>
+              {submitText}
+            </RegisterButton>
+          </RegisterForm>
+          <RegisterButton onClick={handleSignOut}>
+            Sign Out
           </RegisterButton>
-        </RegisterForm>
+        </>
       )}
     </Formik>
   );
