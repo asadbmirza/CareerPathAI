@@ -15,7 +15,7 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
         const response = await axios.post('http://localhost:3000/login', values, {withCredentials: true});
         console.log(`Login successful: ${JSON.stringify(response.data)}`);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        navigate(linkTo);
+        navigate("/details");
       } 
       else if (submitText === 'Continue') {
         const response = await axios.post('http://localhost:3000/register', values, {withCredentials: true});
