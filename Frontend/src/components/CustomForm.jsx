@@ -11,7 +11,6 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
 
   const onSubmit = async (values, { setSubmitting }, submitText) => {
     try {
-      console.log(submitText)
       if (submitText === 'Login') {
         const response = await axios.post('http://localhost:3000/login', values, {withCredentials: true});
         console.log(`Login successful: ${JSON.stringify(response.data)}`);
@@ -23,6 +22,11 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
         console.log(`Registration successful: ${JSON.stringify(response.data)}`);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         navigate(linkTo);
+      }
+      else if (submitText === "Get Curated Advice") {
+        const response = await axios.post('http://localhost:3000/skills', values, {withCredentials: true});
+        console.log(`Skills added successfully: ${JSON.stringify(response.data)}`);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       }
     } 
     catch (error) {
