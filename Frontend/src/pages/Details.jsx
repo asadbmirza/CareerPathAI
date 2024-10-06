@@ -7,9 +7,15 @@ import * as Yup from "yup";
 
 const schema = Yup.object().shape({
   skills: Yup.array()
-    .of(Yup.string().required("Skill cannot be empty"))
-    .min(1, "At least one skill is required"),
+    .of(
+      Yup.string()
+        .matches(/^[A-Za-z\s]+$/, "Skills must contain only letters and spaces")
+        .required('Skill is required')
+    )
+    .min(1, "At least one skill is required")
+    .required("Skills field is required"),
   location: Yup.string()
+    .matches(/^[A-Za-z\s,]+$/, "Location must contain only letters, commas, and spaces")
     .required("Required"),
   education: Yup.string()
     .required("Required"),
