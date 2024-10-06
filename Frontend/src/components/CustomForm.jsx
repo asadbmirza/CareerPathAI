@@ -66,9 +66,9 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
               {submitText}
             </RegisterButton>
           </RegisterForm>
-          <RegisterButton onClick={handleSignOut}>
+          {localStorage.getItem("user") && <RegisterButton onClick={handleSignOut}>
             Sign Out
-          </RegisterButton>
+          </RegisterButton>}
         </>
       )}
     </Formik>

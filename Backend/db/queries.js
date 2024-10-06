@@ -70,6 +70,32 @@ async function getResponsesByUserId(userId) {
   return rows;
 }
 
+async function createSkills(skills, userId) {
+    const query = `
+      INSERT INTO skills (skill, user_id)
+      VALUES ($1, $2)
+      RETURNING *;
+    `;
+
+    for (let i = 0; i < skills.length; i++) {
+        
+      await pool.query(query, [skills[i], userId]);
+    }
+      
+}
+
+async function updateUser(userId, username, email, password, education, location) {
+    const query = `
+      UPDATE users
+      SET username = $1, email = $2, password = $3, education = $4, location = $5
+      WHERE id = $6
+      RETURNING *;
+    `;
+  
+    const { rows } = await pool.query(query, [username, email, password, education, location, userId]);
+    return rows[0];
+  }
+
 async function getSkillsByUserId(userId) {
     const query = `
       SELECT * FROM skills
@@ -86,6 +112,8 @@ module.exports = {
     getUserById,
     getUserByUsername,
     getUserByEmail,
+    createSkills,
+    updateUser,
     createResponses,
     getResponsesByUserId,
     getSkillsByUserId

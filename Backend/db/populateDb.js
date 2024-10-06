@@ -6,7 +6,18 @@ const createUsersTable = `
         id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
         username VARCHAR(225) UNIQUE NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255)
+        password VARCHAR(255),
+        education VARCHAR(255),
+        location VARCHAR(255)
+    );
+`;
+
+const createSkillsTable = `
+    CREATE TABLE IF NOT EXISTS skills (
+        id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+        skill VARCHAR(255),
+        
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
     );
 `;
 
@@ -34,6 +45,7 @@ async function main() {
         
         // Execute each SQL statement separately
         await client.query(createUsersTable);
+        await client.query(createSkillsTable);
         await client.query(createResponsesTable);
 
         
