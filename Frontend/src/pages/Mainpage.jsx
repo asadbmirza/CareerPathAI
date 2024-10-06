@@ -7,31 +7,9 @@ import { useLocation } from 'react-router-dom';
 const Mainpage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const data = location.data || {};
+  const data = location.data || {};
 
-  const data = [
-    {
-      step: "Pursue a post-secondary education in a field related to your discipline",
-      requiredSkills: ["Data Analysis", "Programming", "Problem-solving"]
-    },
-    {
-      step: "Gain relevant work experience",
-      requiredSkills: ["Collaboration", "Teamwork", "Problem-solving", "Responsibilities"]
-    },
-    {
-      step: "Consider going through an apprenticship or on-the-job training to gain relevant experience",
-      requiredSkills: ["Time management", "Attention to detail", "Adaptability"]
-    },
-    {
-      step: "Network and build connections within your industry",
-      requiredSkills: ["Leadership", "Public Speaking", "Networking"]
-    },
-    {
-      step: "Stay up to date wiht industry trends and continue learning",
-      requiredSkills: ["Critical thinking", "Creativity", "Continuous learning", "Collaboration"]
-    },
-  ];
-
+  
   return (
     <main>
       <HeaderText>Based on your information these are potential steps you can take...</HeaderText>
