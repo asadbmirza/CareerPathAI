@@ -9,6 +9,16 @@
   background-color: black;
 }
 
+#root {
+  width: 100%;
+}
+
+main {
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
 .all-skills {
   display: flex;
   gap: 10px;
@@ -29,4 +39,11 @@
   color: white;
   font-size: 15pt;
   margin-left: 20px;
+}
+
+
+@media screen and (min-width: 1200px) {
+    main {
+      width: 800px;
+    }
 }
