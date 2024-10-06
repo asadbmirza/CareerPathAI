@@ -5,7 +5,6 @@ import axios from "axios";
 import { useState } from 'react';
 import { HeaderText } from "../styles/mainpage.js";
 
-
 const CustomForm = ({ initialValues, submitText, schema, children, linkTo, source }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -35,24 +34,22 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
 
   const fetchData = async ({ skills, location, education }) => {
     try {
-      setLoading(true)
-      const response = await axios.get('https://api.example.com/data', {
-        params: {
-          skills,
-          location,
-          education
-        }
+      setLoading(true);
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          console.log("Fetching data...");
+          setData({ skills, location, education });
+          resolve();
+        }, 2000);
       });
-      setData(response.data)
-      navigate(linkTo), {
-        response: {
-          data
-        }
-      };
+
+      navigate(linkTo);
     } 
     catch (error) {
-      setError('An error occurred while fetching data'); // Handle error
-      setLoading(false); // Stop loading on error
+      setError('An error occurred while fetching data');
+    } 
+    finally {
+      setLoading(false);
     }
   };
 
@@ -64,7 +61,7 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
     return  <HeaderText>{error}...</HeaderText>;
   }
 
-
+  
   return (
     <Formik
       initialValues={initialValues}

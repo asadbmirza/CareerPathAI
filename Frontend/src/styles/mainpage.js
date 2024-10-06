@@ -35,7 +35,7 @@ const ImgCaption = styled.div `
 
   img {
     width: 100%;
-    height: 200px;
+    height: 240px;
     object-fit: cover;
     object-position: top;
   }

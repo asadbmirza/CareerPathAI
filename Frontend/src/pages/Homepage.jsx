@@ -17,6 +17,10 @@ const HomepageText = styled.div`
   text-align: center;
   gap: 20px;
   color: white;
+
+  h1 {
+    margin-bottom: 10px;
+  }
 `
 
 const Homepage = () => {
