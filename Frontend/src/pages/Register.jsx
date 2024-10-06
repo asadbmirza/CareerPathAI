@@ -29,7 +29,7 @@ const initialValues = {
 
 const Register = () => {
   return (
-    <div>
+    <>
       <h1></h1>
       <CustomForm
         initialValues={initialValues}
@@ -42,7 +42,7 @@ const Register = () => {
         <FormField label="Password" type="password" name="password"></FormField>
         <ReturningUser><Link to="/login">Returning User?</Link></ReturningUser>
       </CustomForm>
-    </div>
+    </>
   )
 };
 
