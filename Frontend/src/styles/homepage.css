@@ -6,11 +6,11 @@ body {
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: clamp(2.8rem, 2.8rem + 1vw, 4rem);
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 1.5rem + 1vw, 2.5rem);
 }
 
 button {
@@ -31,12 +31,16 @@ a:visited {
   color: unset;
 }
 
-input[type="text"], input[type="email"], input[type="password"] {
+input[type="text"], input[type="email"], input[type="password"], select {
   color: black;
   padding: 12px 17px;
   width: 100%;
   margin-top: 5px;
-  font-size: 1rem;
+  font-size: clamp(0.75rem, 0.75rem + 0.75vw, 1.25rem);
   border-radius: 10px;
   border: 1px rgba(128, 128, 128, 0.256) solid;
+}
+
+.caption {
+  padding: 12px;
 }

@@ -1,21 +1,13 @@
 import styled from "styled-components"
 import { Form, ErrorMessage } from "formik";
 
-
-const HeaderText = styled.h1 `
-  color: white;
-  width: 600px;
-  text-align: center;
-  margin-bottom: 25px;
-`
-
 const RegisterButton = styled.button`
   background-color: #2c2c2c;
   padding: 15px 0;
   width: 100%;
   border-radius: 5px;
   color: white;
-  font-size: 1.2rem;
+  font-size: clamp(0.75rem, 0.75rem + 0.75vw, 1.25rem);
   margin-top: 10px;
 
   &:hover {
@@ -23,11 +15,11 @@ const RegisterButton = styled.button`
     background-color: #64558f;
     color: white;
   }
+  
 `
 const RegisterForm = styled(Form)`
   display: flex;
   flex-direction: column;
-  width: 600px;
   align-items: center;
   justify-content: center;
   gap: 15px;
@@ -35,6 +27,14 @@ const RegisterForm = styled(Form)`
   font-size: 1.2rem;
   background-color: white;
   border-radius: 5px;
+  width: 90%;
+  max-width: 600px;
+  margin: auto;
+
+
+  @media (min-width: 1200px) {
+    width: 600px;
+  }
 `;
 
 const InfoBox = styled.div`
