@@ -1,22 +1,50 @@
 import { RegisterButton, RegisterForm } from "../styles/formstyles.js"
 import { Formik } from "formik";
-import * as Yup from "yup";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
-
-
-const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => {
+const CustomForm = ({ initialValues, submitText, schema, children, linkTo, source }) => {
   const navigate = useNavigate();
 
-  const onSubmit = async (values, { setSubmitting }) => {
+  const handleSignOut = async () => {
     try {
-      const response = await axios.post('https://jsonplaceholder.typicode.com/users', values);
-      console.log(`Registration successful: ${JSON.stringify(response.data)}`);
-      navigate(linkTo)
+      const response = await axios.post('http://localhost:3000/logout', {withCredentials: true});
+      console.log(`Logout successful: ${JSON.stringify(response.data)}`);
+      localStorage.removeItem("user");
+      navigate('/login');
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+    
+  }
+
+  const onSubmit = async (values, { setSubmitting }, submitText) => {
+    try {
+      if (submitText === 'Login') {
+        const response = await axios.post('http://localhost:3000/login', values, {withCredentials: true});
+        console.log(`Login successful: ${JSON.stringify(response.data)}`);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        navigate("/details");
+      } 
+      else if (submitText === 'Continue') {
+        const response = await axios.post('http://localhost:3000/register', values, {withCredentials: true});
+        console.log(`Registration successful: ${JSON.stringify(response.data)}`);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        navigate(linkTo);
+      }
+      else if (submitText === "Get Curated Advice") {
+        const response = await axios.post('http://localhost:3000/skills', values, {withCredentials: true});
+        console.log(`Skills added successfully: ${JSON.stringify(response.data)}`);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        if(source === "details"){
+          fetchData(response.data);
+        }
+        navigate(linkTo)
+      }
+      
     } 
     catch (error) {
-      console.error('There was an error!', error);
+      console.error('There was an error!', error)
       return null;
     } 
     finally {
@@ -24,21 +52,42 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
     }
   }
 
+  const fetchData = async ({ skills, location, education }) => {
+    try {
+      const response = await axios.get('https://api.example.com/data', {
+        params: {
+          skills,
+          location,
+          education
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={schema}
       validateOnChange={false}
       validateOnBlur={true}
-      onSubmit={onSubmit}
+      onSubmit={(values, actions) => onSubmit(values, actions, submitText)}
     >
       {({ values, setFieldValue, isSubmitting }) => (
-        <RegisterForm>
-          {children}
-          <RegisterButton type="submit" disabled={isSubmitting}>
-            {submitText}
-          </RegisterButton>
-        </RegisterForm>
+        <>
+          <RegisterForm>
+            {children}
+            <RegisterButton type="submit" disabled={isSubmitting}>
+              {submitText}
+            </RegisterButton>
+            {localStorage.getItem("user") && <RegisterButton type="button" onClick={handleSignOut}>
+            Sign Out
+          </RegisterButton>}
+          </RegisterForm>
+          
+        </>
       )}
     </Formik>
   );

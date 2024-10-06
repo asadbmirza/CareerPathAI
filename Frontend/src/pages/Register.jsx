@@ -3,6 +3,9 @@ import { Link } from "react-router-dom"
 import { ReturningUser } from "../styles/formstyles.js"
 import CustomForm from '../components/CustomForm'
 import FormField from "../components/FormField.jsx"
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 import * as Yup from "yup";
 
 const schema = Yup.object().shape({
@@ -28,8 +31,30 @@ const initialValues = {
       }
 
 const Register = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/login', {
+          withCredentials: true,
+        });
+        navigate('/details');
+        console.log(response.data);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          console.log(`You are authenticated`);
+          
+        } else {
+          console.error("Error fetching login:", error);
+        }
+      }
+    };
+
+    fetchSkills();
+  }, [navigate]);
+
   return (
-    <div>
+    <>
       <h1></h1>
       <CustomForm
         initialValues={initialValues}
@@ -42,7 +67,7 @@ const Register = () => {
         <FormField label="Password" type="password" name="password"></FormField>
         <ReturningUser><Link to="/login">Returning User?</Link></ReturningUser>
       </CustomForm>
-    </div>
+    </>
   )
 };
 
