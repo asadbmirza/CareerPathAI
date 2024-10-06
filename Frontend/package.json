@@ -10,14 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD:Frontend/package.json
     "axios": "^1.7.7",
     "formik": "^2.4.6",
-=======
     "@huggingface/inference": "^2.8.1",
     "dotenv": "^16.4.5",
     "groq-sdk": "^0.7.0",
->>>>>>> origin/AI_Functionality:package.json
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",

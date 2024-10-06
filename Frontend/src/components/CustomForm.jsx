@@ -2,8 +2,13 @@ import { RegisterButton, RegisterForm } from "../styles/formstyles.js"
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
+import { useState } from 'react';
+import { HeaderText } from "../styles/mainpage.js";
+
 
 const CustomForm = ({ initialValues, submitText, schema, children, linkTo, source }) => {
+  
+
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -36,9 +41,6 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
         const response = await axios.post('http://localhost:3000/skills', values, {withCredentials: true});
         console.log(`Skills added successfully: ${JSON.stringify(response.data)}`);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        if(source === "details"){
-          fetchData(response.data);
-        }
         navigate(linkTo)
       }
       
@@ -52,20 +54,8 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
     }
   }
 
-  const fetchData = async ({ skills, location, education }) => {
-    try {
-      const response = await axios.get('https://api.example.com/data', {
-        params: {
-          skills,
-          location,
-          education
-        }
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
+  
+
 
   return (
     <Formik
