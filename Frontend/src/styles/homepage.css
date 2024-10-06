@@ -31,7 +31,7 @@ a:visited {
   color: unset;
 }
 
-input[type="text"], input[type="email"], input[type="password"] {
+input[type="text"], input[type="email"], input[type="password"], select {
   color: black;
   padding: 12px 17px;
   width: 100%;

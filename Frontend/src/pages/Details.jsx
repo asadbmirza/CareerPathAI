@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CustomForm from '../components/CustomForm';
 import FormField from '../components/FormField';
 import ListField from '../components/ListField';
+import SelectField from '../components/SelectField';
 import * as Yup from "yup";
 
 const schema = Yup.object().shape({
@@ -51,7 +52,7 @@ const Details = () => {
           removeItem={removeSkill}
         />
         <FormField label="Location" type="text" name="location"></FormField>
-        <FormField label="Education" type="text" name="education"></FormField>
+        <SelectField label="Highest Completed Educatation" name="education"></SelectField>
       </CustomForm>
     </div>
   );
