@@ -41,6 +41,8 @@ const Details = () => {
 
   const initialValues = { skills: [], location: '', education: '' };
 
+
+
   return (
     <div>
       <CustomForm
@@ -48,6 +50,7 @@ const Details = () => {
         submitText="Get Curated Advice"
         schema={schema}
         linkTo="/dashboard"
+        source="details"
       >
         <ListField 
           label="Skills and Interests" 
