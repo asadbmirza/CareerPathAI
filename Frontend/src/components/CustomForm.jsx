@@ -1,12 +1,9 @@
 import { RegisterButton, RegisterForm } from "../styles/formstyles.js"
 import { Formik } from "formik";
-import * as Yup from "yup";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
-
-
-const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => {
+const CustomForm = ({ initialValues, submitText, schema, children, linkTo, source }) => {
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -39,16 +36,36 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
         const response = await axios.post('http://localhost:3000/skills', values, {withCredentials: true});
         console.log(`Skills added successfully: ${JSON.stringify(response.data)}`);
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        if(source === "details"){
+          fetchData(response.data);
+        }
+        navigate(linkTo)
       }
+      
     } 
     catch (error) {
-      console.error('There was an error!', error);
+      console.error('There was an error!', error)
       return null;
     } 
     finally {
       setSubmitting(false); 
     }
   }
+
+  const fetchData = async ({ skills, location, education }) => {
+    try {
+      const response = await axios.get('https://api.example.com/data', {
+        params: {
+          skills,
+          location,
+          education
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   return (
     <Formik
@@ -65,10 +82,11 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo }) => 
             <RegisterButton type="submit" disabled={isSubmitting}>
               {submitText}
             </RegisterButton>
-          </RegisterForm>
-          {localStorage.getItem("user") && <RegisterButton onClick={handleSignOut}>
+            {localStorage.getItem("user") && <RegisterButton type="button" onClick={handleSignOut}>
             Sign Out
           </RegisterButton>}
+          </RegisterForm>
+          
         </>
       )}
     </Formik>

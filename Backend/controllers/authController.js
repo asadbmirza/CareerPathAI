@@ -100,7 +100,7 @@ const postRegister = async (req, res) => {
 const postLogout = (req, res) => {
   req.logout((err) => { 
       if (err) {
-          return res.status(500).json({ message: "Logout failed" });
+          return next(err);
       }
       return res.status(200).send("Logged out successfully");
   });

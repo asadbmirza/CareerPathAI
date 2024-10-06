@@ -3,8 +3,6 @@ import CustomForm from '../components/CustomForm';
 import { Link } from "react-router-dom"
 import { ReturningUser } from "../styles/formstyles.js"
 import FormField from "../components/FormField.jsx";
-import { ReturningUser } from "../styles/formstyles.js";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";

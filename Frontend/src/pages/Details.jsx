@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CustomForm from '../components/CustomForm';
 import FormField from '../components/FormField';
 import ListField from '../components/ListField';
+import SelectField from '../components/SelectField';
 import * as Yup from "yup";
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -9,9 +10,15 @@ import axios from 'axios';
 
 const schema = Yup.object().shape({
   skills: Yup.array()
-    .of(Yup.string().required("Skill cannot be empty"))
-    .min(1, "At least one skill is required"),
+    .of(
+      Yup.string()
+        .matches(/^[A-Za-z\s]+$/, "Skills must contain only letters and spaces")
+        .required('Skill is required')
+    )
+    .min(1, "At least one skill is required")
+    .required("Skills field is required"),
   location: Yup.string()
+    .matches(/^[A-Za-z\s,]+$/, "Location must contain only letters, commas, and spaces")
     .required("Required"),
   education: Yup.string()
     .required("Required"),
@@ -59,6 +66,8 @@ const Details = () => {
 
   const initialValues = { skills: [], location: '', education: '' };
 
+
+
   return (
     <div>
       <CustomForm
@@ -66,6 +75,7 @@ const Details = () => {
         submitText="Get Curated Advice"
         schema={schema}
         linkTo="/dashboard"
+        source="details"
       >
         <ListField 
           label="Skills and Interests" 
@@ -76,7 +86,7 @@ const Details = () => {
           removeItem={removeSkill}
         />
         <FormField label="Location" type="text" name="location"></FormField>
-        <FormField label="Education" type="text" name="education"></FormField>
+        <SelectField label="Highest Completed Educatation" name="education"></SelectField>
       </CustomForm>
     </div>
   );
