@@ -40,3 +40,7 @@ input[type="text"], input[type="email"], input[type="password"] {
   border-radius: 10px;
   border: 1px rgba(128, 128, 128, 0.256) solid;
 }
+
+.caption {
+  padding: 12px;
+}

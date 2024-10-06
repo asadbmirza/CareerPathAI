@@ -16,8 +16,7 @@
 main {
   width: 90%;
   max-width: 800px;
-  border: 2px solid red;
-  margin: auto;
+  margin: 20px auto;
 }
 
 .all-skills {
