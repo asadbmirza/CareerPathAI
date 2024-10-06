@@ -15,6 +15,11 @@ const SuggestionCardStyle = styled.div`
   margin: 20px 0px;
   height: 300px;
   gap: 15px;
+  transition: 200ms;
+
+  &:hover {
+    scale: 1.02;
+  }
 `
 
 const ImgCaption = styled.div `
@@ -72,6 +77,7 @@ const CardTextStyle = styled.div`
     padding: 5px 8px;
     border-radius: 5px;
   }
+
 `
 
 export { HeaderText, SuggestionCardStyle, ImgCaption, CardTextStyle }
