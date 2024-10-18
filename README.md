@@ -23,6 +23,6 @@ We’re incredibly proud of the fact that we successfully built a working websit
 
 Throughout the development process, we gained significant experience in training and fine-tuning AI models. We also learned the importance of refining data inputs and how they affect AI output, particularly when trying to achieve a high degree of personalization. Collaboratively, our team improved our problem-solving skills, learning to overcome technical challenges related to AI integration, backend efficiency, and frontend responsiveness.
 
-###**What's next for CareerPathAI**
+### **What's next for CareerPathAI**
 
 We would say the next main steps for CareerPathAI would be how to web scrape from various sources to get better data for our model, and also how to properly fine-tune/train an AI model for better personalization to help more people.
