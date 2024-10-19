@@ -19,7 +19,7 @@ const Mainpage = () => {
       try {
         setLoading(true)
         console.log(loading);
-        const response = await axios.get('http://localhost:3000/responses', {
+        const response = await axios.get('http://localhost:3000/api/responses', {
           withCredentials: true
         });
         console.log(`Data fetched successfully: ${JSON.stringify(response.data)}`);

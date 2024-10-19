@@ -33,24 +33,10 @@ const initialValues = {
 const Register = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/login', {
-          withCredentials: true,
-        });
-        navigate('/details');
-        console.log(response.data);
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          console.log(`You are authenticated`);
-          
-        } else {
-          console.error("Error fetching login:", error);
-        }
-      }
-    };
-
-    fetchSkills();
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate("/details");
+    }
   }, [navigate]);
 
   return (
