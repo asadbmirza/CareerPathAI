@@ -1,5 +1,6 @@
-const { Client } = require("pg");
-require("dotenv").config();
+import Client from "pg";
+import dotenv from "dotenv";
+dotenv.config();
 
 const createUsersTable = `
     CREATE TABLE IF NOT EXISTS users (

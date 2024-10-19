@@ -1,111 +1,68 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcryptjs");
-const db = require("../db/queries");
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import db from "../db/queries.js";
 
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const user = await db.getUserByUsername(username);
-      if (!user) {
-        return done(null, false, { message: "Incorrect username" });
-      }
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        return done(null, false, { message: "Incorrect password" });
-      }
-      return done(null, user);
-    } catch (err) {
-      return done(err);
-    }
-  })
-);
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await db.getUserById(id); 
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
-
-const getUserProfile = (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).send("You are not authenticated");
-  }
-  if (!req.user) {
-    return res.status(500).send("User data not found");
-  }
-  console.log(req.user);
-  res.status(200).json(req.user);
-};
-
-const getUser = (req, res) => {
-  if (req.isAuthenticated()) {
-    return res.status(200).json(req.user);
-  }
-  return res.status(401).send("You are not authenticated");
+function checkPassword(password)
+{
+    const re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return re.test(password);
 }
 
-const postLogin = (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      return res.status(500).json({ message: "Internal Server Error" });
+async function checkEmail(email){
+    const result = await db.getUserByEmail(email);
+    console.log(result);
+    return result.length > 0;
+}
+
+async function checkUsername(username){
+    const result = await db.getUserByUsername(username);
+    console.log(result);
+    return result.length > 0;
+}
+
+const postLogin = async (req, res, next) => {
+  try {
+    const user = await db.getUserByUsername(req.body.username);
+    if (user.length === 0) {
+      return res.status(401).json({ message: "Username does not exist" });
     }
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+    const validPassword = await bcrypt.compare(req.body.password, user[0].password);
+    if (!validPassword) {
+      return res.status(401).json({ message: "Invalid password" });
     }
-    
-    req.logIn(user, (err) => {
-      if (err) {
-        return res.status(500).json({ message: "Login failed" });
-      }
-      
-      // Only send response once
-      return res.status(200).json({ message: "Login successful", user: user });
-    });
-  })(req, res, next);
+    const token = jwt.sign({ id: user[0].id }, process.env.JWT_SECRET, { expiresIn: '3h' });
+
+    return res.status(200).json({ message: "Login successful", user: user[0] , token: token });
+
+  } catch (err) {
+    res.status(500).send("An error occurred while logging in");
+  }
+  
 };
 
 const postRegister = async (req, res) => {
   const { username, email, password } = req.body;
   try {
+    
+    if (await checkUsername(username)) {
+      return res.status(401).send("Username already exists");
+    }
+    if (await checkEmail(email)) {
+      return res.status(401).send("Email already exists");
+    }
+    if (!checkPassword(password)) {
+      return res.status(401).send("Password is not strong enough");
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
-    if (await db.getUserByUsername(username)) {
-      return res.status(400).send("Username already exists");
-    }
-    if (await db.getUserByEmail(email)) {
-      return res.status(400).send("Email already exists");
-    }
-
     const newUser = await db.createUser(username, email, hashedPassword);
-    req.logIn(newUser, (err) => {
-      if (err) {
-        return res.status(500).json({ message: "Login failed" });
-      }
-      return res.status(200).json({ message: "Login successful" }); 
-    });
+    const token = jwt.sign({ id: newUser[0].id }, process.env.JWT_SECRET, { expiresIn: '3h' });
 
-    return res.status(200).json({ message: "Login successful" });
+
+    return res.status(200).json({ message: "Login successful", user: newUser[0] , token: token });
   } catch (err) {
     res.status(500).send("An error occurred while registering");
   }
 };
-
-const postLogout = (req, res) => {
-  req.logout((err) => { 
-      if (err) {
-          return next(err);
-      }
-      return res.status(200).send("Logged out successfully");
-  });
-};
-
 
 const getDashboard = (req, res) => {
   if (!req.isAuthenticated()) {
@@ -114,17 +71,9 @@ const getDashboard = (req, res) => {
   res.send(`Welcome to your dashboard, ${req.user.username}`);
 };
 
-const getSkills = async (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).send("You are not authenticated");
-  }
-  const skills = await db.getSkillsByUserId(req.user.id);
-  res.status(200).json(skills);
-}
-
 const postSkills = async (req, res) => {
   const { skills, location, education } = req.body;
-  console.log(req.user)
+  console.log(req.user);
   try {
     await db.createSkills(skills, req.user.id);
     await db.updateUser(
@@ -141,13 +90,10 @@ const postSkills = async (req, res) => {
   }
 };
 
-module.exports = {
-  getUser,
-  getUserProfile,
+export default {
   postLogin,
-  postLogout,
   postRegister,
   getDashboard,
+  getSkills,
   postSkills,
-  getSkills
 };
