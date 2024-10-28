@@ -1,21 +1,19 @@
 import { RegisterButton, RegisterForm } from "../styles/formstyles.js"
 import { Formik } from "formik";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import axios from "axios";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HeaderText } from "../styles/mainpage.js";
 
 
 const CustomForm = ({ initialValues, submitText, schema, children, linkTo, source }) => {
-  
-
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSignOut = () => {
     localStorage.clear();
     navigate('/login');
   }
-
   const onSubmit = async (values, { setSubmitting }, submitText) => {
     try {
       if (submitText === 'Login') {
@@ -39,9 +37,9 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
         navigate(linkTo);
       }
       else if (submitText === "Get Curated Advice") {
-        const response = await axios.post('http://localhost:3000/api/skills', values, {withCredentials: true});
+        const token = localStorage.getItem('token');
+        const response = await axios.post('http://localhost:3000/api/skills', values, {headers: { Authorization: `Bearer ${token}` }, withCredentials: true});
         console.log(`Skills added successfully: ${JSON.stringify(response.data)}`);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
         navigate(linkTo)
       }
       
@@ -66,6 +64,7 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
       validateOnBlur={true}
       onSubmit={(values, actions) => onSubmit(values, actions, submitText)}
     >
+      
       {({ values, setFieldValue, isSubmitting }) => (
         <>
           <RegisterForm>
@@ -80,6 +79,7 @@ const CustomForm = ({ initialValues, submitText, schema, children, linkTo, sourc
           
         </>
       )}
+      
     </Formik>
   );
 };

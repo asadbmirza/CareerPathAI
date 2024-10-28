@@ -18,7 +18,8 @@ const createSkillsTable = `
         id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
         skill VARCHAR(255),
         
-        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        UNIQUE (user_id, skill)
     );
 `;
 
@@ -35,6 +36,15 @@ const createResponsesTable = `
     );
 `;
 
+const createResponseSkillsTable = `
+    CREATE TABLE IF NOT EXISTS responseSkills (
+        id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+        skill VARCHAR(255),
+        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        response_id INTEGER REFERENCES responses(id) ON DELETE CASCADE
+    );
+`;
+
 async function main() {
     console.log("seeding....");
     const client = new Client({
@@ -48,6 +58,7 @@ async function main() {
         await client.query(createUsersTable);
         await client.query(createSkillsTable);
         await client.query(createResponsesTable);
+        await client.query(createResponseSkillsTable);
 
         
         console.log("done");

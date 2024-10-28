@@ -64,36 +64,9 @@ const postRegister = async (req, res) => {
   }
 };
 
-const getDashboard = (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).send("You are not authenticated");
-  }
-  res.send(`Welcome to your dashboard, ${req.user.username}`);
-};
 
-const postSkills = async (req, res) => {
-  const { skills, location, education } = req.body;
-  console.log(req.user);
-  try {
-    await db.createSkills(skills, req.user.id);
-    await db.updateUser(
-      req.user.id,
-      req.user.username,
-      req.user.email,
-      req.user.password,
-      education,
-      location
-    );
-    res.status(200).send("Skills added successfully");
-  } catch (err) {
-    res.status(500).send("An error occurred while adding skills");
-  }
-};
 
 export default {
   postLogin,
   postRegister,
-  getDashboard,
-  getSkills,
-  postSkills,
 };

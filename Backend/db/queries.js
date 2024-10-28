@@ -41,24 +41,24 @@ async function getUserByEmail(email) {
   return rows;
 }
 
-async function createResponses(rating, responses, userId) {
-  const query = `
-    INSERT INTO responses (rating, response1, response2, response3, response4, response5, user_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING *;
-  `;
+// async function createResponses(rating, responses, userId) {
+//   const query = `
+//     INSERT INTO responses (rating, response1, response2, response3, response4, response5, user_id)
+//     VALUES ($1, $2, $3, $4, $5, $6, $7)
+//     RETURNING *;
+//   `;
 
-  const { rows } = await pool.query(query, [
-    rating,
-    responses[0],
-    responses[1],
-    responses[2],
-    responses[3],
-    responses[4],
-    userId,
-  ]);
-  return rows;
-}
+//   const { rows } = await pool.query(query, [
+//     rating,
+//     responses[0],
+//     responses[1],
+//     responses[2],
+//     responses[3],
+//     responses[4],
+//     userId,
+//   ]);
+//   return rows;
+// }
 
 async function getResponsesByUserId(userId) {
   const query = `
@@ -82,33 +82,23 @@ async function createSkills(skills, userId) {
   }
 }
 
-async function updateUser(
-  userId,
-  username,
-  email,
-  password,
-  education,
-  location
-) {
+async function updateLocationEducation(userId, education, location) {
   const query = `
       UPDATE users
-      SET username = $1, email = $2, password = $3, education = $4, location = $5
-      WHERE id = $6
+      SET education = $1, location = $2
+      WHERE id = $3
       RETURNING *;
     `;
-
-  const { rows } = await pool.query(query, [
-    username,
-    email,
-    password,
-    education,
-    location,
-    userId,
-  ]);
-  return rows;
+  try {
+    const { rows } = await pool.query(query, [education, location, userId]);
+    return rows;
+  } catch (error) {
+    console.error("Database update error:", error);
+    throw error; // or return a specific error message
+  }
 }
 
-async function getSkillsByUserId(userId) {
+async function getSkills(userId) {
   const query = `
       SELECT * FROM skills
       WHERE user_id = $1;
@@ -116,6 +106,46 @@ async function getSkillsByUserId(userId) {
 
   const { rows } = await pool.query(query, [userId]);
   return rows;
+}
+
+async function createResponses(responses, userId) {
+  try {
+    const query = `
+    INSERT INTO responses (response, user_id)
+    VALUES ($1, $2)
+    RETURNING *;
+  `;
+
+    for (let i = 0; i < responses.length; i++) {
+      let { rows } = await pool.query(query, [
+        responses[i].step,
+        userId,
+      ]);
+      await createResponseSkills(
+        responses[i].requiredSkills,
+        userId,
+        rows[0].id
+      );
+    }
+  } catch (err) {
+    console.error("Error creating responses:", err);
+  }
+}
+
+async function createResponseSkills(skills, userId, responseId) {
+  try {
+    const query = `
+      INSERT INTO responseSkills (skill, user_id, response_id)
+      VALUES ($1, $2, $3)
+      RETURNING *;
+    `;
+
+    for (let i = 0; i < skills.length; i++) {
+      await pool.query(query, [skills[i], userId, responseId]);
+    }
+  } catch (err) {
+    console.error("Error creating response skills:", err);
+  }
 }
 
 export default {
@@ -126,6 +156,6 @@ export default {
   createResponses,
   getResponsesByUserId,
   createSkills,
-  updateUser,
-  getSkillsByUserId,
+  updateLocationEducation,
+  getSkills,
 };

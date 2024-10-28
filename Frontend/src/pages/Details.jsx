@@ -25,30 +25,8 @@ const schema = Yup.object().shape({
 });
 
 
-const Details = () => {
+const Details = ({}) => {
   const [skills, setSkills] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/skills', {
-          withCredentials: true,
-        });
-
-        console.log(response.data);
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          console.log(`You are not authenticated`);
-          navigate('/login'); // Redirect to login page
-        } else {
-          console.error("Error fetching skills:", error);
-        }
-      }
-    };
-
-    fetchSkills();
-  }, [navigate]);
 
   const addSkill = (value, setFieldValue) => {
     if (value && !skills.includes(value)) {
