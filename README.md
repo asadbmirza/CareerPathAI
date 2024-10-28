@@ -1,5 +1,8 @@
 Submitted to HTV 9
 
+![original](https://github.com/user-attachments/assets/179ed66e-7a9a-49f0-97cd-b86b1f2111f8)
+
+
 ### **Inspiration**
 
 As students, we know navigating a career path is often confusing and overwhelming, especially when geographical location, access to resources, and personal background create additional barriers. We were inspired by the challenges that many people face when trying to advance in their careers, particularly those in underrepresented regions or communities. We wanted to create a tool that could help anyone, regardless of where they come from, gain clarity on their career goals and how to achieve them. The idea was to harness the power of AI to provide personalized, actionable career advice that takes into account an individual’s unique context—be it their location, skills, education, or interests. This idea was mainly inspired by reading various SDGs such as "8. Decent Work and Economic Growth" and "Quality Education".
