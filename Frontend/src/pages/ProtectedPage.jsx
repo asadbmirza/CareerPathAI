@@ -9,14 +9,17 @@ const ProtectedPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   if (!token) {
     return <Navigate to="/login" />;
   }
+  
 
   const location = useLocation();
 
   useEffect(() => {
     console.log(location.pathname);
+    setLoading(true);
     const path = location.pathname === "/details" ? "/skills" : location.pathname;
 
     async function fetchData() {
@@ -36,14 +39,16 @@ const ProtectedPage = () => {
         console.error('There was an error!', error);
         setError(error);
       } finally {
-        setLoading(false);
+        if (location.pathname !== "/details") {
+          setLoading(false);
+        }
       }
     }
 
     fetchData();
   }, [location.pathname, token]);
 
-  if (loading) {
+  if (loading && location.pathname !== "/details") {
     return <HeaderText>Loading...</HeaderText>;
   }
   
