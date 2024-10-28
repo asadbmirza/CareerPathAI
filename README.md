@@ -29,4 +29,4 @@ Throughout the development process, we gained significant experience in training
 
 ### **What's next for PathWay**
 
-We would say the next main steps for CareerPathAI would be how to web scrape from various sources to get better data for our model, and also how to properly fine-tune/train an AI model for better personalization to help more people.
+We would say the next main steps for PathWay would be how to web scrape from various sources to get better data for our model, and also how to properly fine-tune/train an AI model for better personalization to help more people.
