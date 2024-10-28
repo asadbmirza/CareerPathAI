@@ -15,7 +15,7 @@ Frontend: We used React to build a responsive and user-friendly interface. The f
 ### **Challenges we ran into**
 
 The main challenge we ran into was fine-tuning our AI model with a custom data set as none of us had any previous ML experience and had to learn from scratch this weekend by following various tutorials.
-Another challenge we experienced was handling various errors in our backend with our login and registration. We tackled this by using passport.js to simplify our login/logout process and express-session to handle the session of the user.
+Another challenge we experienced was handling various errors in our backend with our login and registration. We tackled this by using JWT's to simplify our login/logout process and express-session to handle the session of the user.
 Accomplishments that we're proud of
 We’re incredibly proud of the fact that we successfully built a working website capable of generating career paths that adapt to users’ unique circumstances. We believe the ability to factor in both geographical and personal elements to offer tailored advice sets our project apart. Additionally, we are proud of the smooth integration between the AI model, frontend, and backend, which ensures a cohesive and responsive user experience.
 
